@@ -1,62 +1,66 @@
-//variables y funciones
+let savedPIN = '1724';
 
-let nombreUsuario = prompt("Bienvenido, ingrese su nombre por favor: ");
-let entrada = prompt("Hola"+" "+nombreUsuario+"! "+"Ingrese los cursos que quiere realizar. Escriba ESC para salir: ");
-let unaFecha;
+function login() {
 
-//llamada de la funcion
-elegirCurso(entrada);
+    let access = false;
 
+    for (let i = 2; i >= 0; i--) {
+        let userPIN = prompt('Ingresa tu PIN. Tienes ' + (i + 1) + ' oportunidades.')
+        if (userPIN === savedPIN) {
+            alert('Ingreso exitoso. Bienvenido/a');
+            access = true;
+            break;
+        } else {
+            alert('Error. Te quedan ' + i + ' intentos.')
+        }
+    }
 
-//espacio para definir funciones
-function elegirCurso(entrada) {
-    
-    while (entrada != "ESC") {
-        switch(entrada) {
-            case "1": 
-                fechaIncio7regiones = new Date(2023,12,30);
-                if (chequearFechas(fechaIncio7regiones) == false) {
-                    alert("Lo sentimos pero el curso ya ha iniciado! Sera un placer tenerlo en la próxima edición!");
-                    entrada = prompt("Escriba ESC para salir ");
-                    break;
+    return access
+}
+
+if (login()) {
+    let saldo = 200000;
+
+    let option = prompt('Elegí una opción: \n1- Saldo. \n2 - Retiro de dinero. \n3 - Depósito. \nPresioná X para finalizar.');
+
+    while (option != 'X' && option != 'x') {
+        //opciones de menu de cajero
+        switch (option) {
+            case '1':
+                alert('Tu saldo es $ ' + saldo);
+                break;
+            case '2':
+                let retiro = parseInt(prompt('Ingresa cantidad a retirar'));
+                if (retiro <= saldo) {
+                    saldo = saldo - retiro;
+                    //  saldo -= retiro;
+                    alert('Retiro exitoso. Tu nuevo saldo es $ ' + saldo);
+
+                } else {
+                    alert('Fondos insuficientes');
                 }
-                else if (chequearFechas(fechaIncio7regiones) == true) {
-                    alert(nombreUsuario+" "+"seleccione aceptar y se abrira el formulario de inscripcion para el curso de 7 regiones: ");
-                    abrirFormulario();
-                    despedirUsuario(nombreUsuario);
-                    entrada = prompt("Escriba ESC para salir ");
-                    break;
-                }
+                break;
+            case '3':
+                let deposito = parseInt(prompt('Ingresa monto a depositar'));
+                saldo += deposito;
+                alert('Depósito exitoso. Tu nuevo saldo es $ ' + saldo);
+                break;
+
             default:
-                alert("Disculpe que no podamos ayudarlo! El curso que ingreso no se encuentra disponible momentaneamente");
-                entrada = prompt("Escriba ESC para salir ");
-                break;  
-            }
-        } 
-    } 
+                alert('Elegiste una opción inválida');
+                break;
+        }
 
-function evaluarNombre(nombre) {
+        option = prompt('Elegí una opción: \n1- Saldo. \n2 - Retiro de dinero. \n3 - Depósito. \n Presioná X para finalizar.');
+    }
 
-    if (nombre == ""){
-        alert("Usted no posee otros nombres");    
-    }
-    else {
-        alert("Su segundo nombre es: "+nombre);
-    }
+
+
+} else {
+
+    alert('Retendremos tu tarjeta por seguridad');
 }
 
-function despedirUsuario(nombreUsuario) {
-    alert("Gracias por confiar en nosotros"+" "+nombreUsuario+" "+"le aseguramos que será una experiencia sumamente enriquecedora");
-}
-
-function chequearFechas(unaFecha) {
-    if (unaFecha < fechaActual) {
-        return false;
-    }
-    else {
-        return true;
-    }
-
-}
+alert('Adiós');
 
 
