@@ -1,66 +1,91 @@
-let savedPIN = '1724';
+class Libro {
 
-function login() {
+    constructor(titulo, autor, anio, genero, valoracion, id) {
+        this.titulo = titulo;
+        this.autor = autor;
+        this.anio = parseInt(anio);
+        this.genero = genero;
+        this.valoracion = parseInt(valoracion);
+        this.id = id;
+    }
 
-    let access = false;
+    asignarId(array) {
+        this.id = array.length;
+    }
 
-    for (let i = 2; i >= 0; i--) {
-        let userPIN = prompt('Ingresa tu PIN. Tienes ' + (i + 1) + ' oportunidades.')
-        if (userPIN === savedPIN) {
-            alert('Ingreso exitoso. Bienvenido/a');
-            access = true;
+    asignarValoracion(valoracion) {
+        this.valoracion = valoracion;
+    }
+
+}
+
+const libros = [
+    new Libro('American Gods', 'Neil Gaiman', 2001, 'Fantasía', 6, 1),
+    new Libro('Némesis', 'Agatha Christie', 1971, 'Misterio', 8, 2),
+    new Libro('Los elefantes pueden recordar', 'Agatha Christie', 1972, 'Misterio', 7, 3),
+    new Libro('David Copperfield', 'Charles Dickens', 1950, 'Novela', 8, 4),
+    new Libro('Narciso y Golmundo', 'Hermann Hesse', 1930, 'Novela', 9, 5),
+    new Libro('Los Borgia', 'Mario Puzo', 2001, 'Novela histórica', 9, 6),
+    new Libro('El Hobbit', 'J.R.R. Tolkien', 1937, 'Novela fantástica', 10, 7)
+]
+
+let continuar = true;
+
+
+while (continuar) {
+    let ingreso = prompt('Ingresa los datos del libro: titulo, autor, año, género, puntaje de 1 a 10, separados por una barra diagonal (/). Ingresa X para finalizar');
+
+    if (ingreso.toUpperCase() == 'X') {
+        continuar = false;
+        break;
+    }
+
+    let datos = ingreso.split('/');
+
+    const libro = new Libro(datos[0], datos[1], datos[2], datos[3], datos[4]);
+    libros.push(libro);
+    libro.asignarId(libros);
+
+}
+
+let criterio = prompt('Elegí el criterio deseado:\n1 - Título (A a Z) \n2 - Título (Z a A)\n3 - Mejor a peor puntuado \n4 - Fecha de publicación (Más viejo a más nuevo)');
+
+function ordenar(criterio, array) {
+    let arrayOrdenado = array.slice(0);
+
+    switch (criterio) {
+        case '1':
+            let nombreAscendente = arrayOrdenado.sort((a, b) => a.titulo.localeCompare(b.titulo));
+            return nombreAscendente;
+
+        case '2':
+            return arrayOrdenado.sort((a, b) => b.titulo.localeCompare(a.titulo));
+        //return nombreDescendente;
+        case '3':
+            return arrayOrdenado.sort((a, b) => b.valoracion - a.valoracion);
+        case '4':
+            return arrayOrdenado.sort((a, b) => a.anio - b.anio);
+        default:
+            alert('No es un criterio válido');
             break;
-        } else {
-            alert('Error. Te quedan ' + i + ' intentos.')
-        }
     }
 
-    return access
 }
 
-if (login()) {
-    let saldo = 200000;
+function crearStringResultado(array) {
+    let info = ''
 
-    let option = prompt('Elegí una opción: \n1- Saldo. \n2 - Retiro de dinero. \n3 - Depósito. \nPresioná X para finalizar.');
+    array.forEach(elemento => {
+        info += 'Título: ' + elemento.titulo + '\nAutor: ' + elemento.autor + '\nAño de publicación: ' + elemento.anio + '\nValoración: ' + elemento.valoracion + ' puntos.\n\n'
 
-    while (option != 'X' && option != 'x') {
-        //opciones de menu de cajero
-        switch (option) {
-            case '1':
-                alert('Tu saldo es $ ' + saldo);
-                break;
-            case '2':
-                let retiro = parseInt(prompt('Ingresa cantidad a retirar'));
-                if (retiro <= saldo) {
-                    saldo = saldo - retiro;
-                    //  saldo -= retiro;
-                    alert('Retiro exitoso. Tu nuevo saldo es $ ' + saldo);
+    });
 
-                } else {
-                    alert('Fondos insuficientes');
-                }
-                break;
-            case '3':
-                let deposito = parseInt(prompt('Ingresa monto a depositar'));
-                saldo += deposito;
-                alert('Depósito exitoso. Tu nuevo saldo es $ ' + saldo);
-                break;
+    return info;
 
-            default:
-                alert('Elegiste una opción inválida');
-                break;
-        }
-
-        option = prompt('Elegí una opción: \n1- Saldo. \n2 - Retiro de dinero. \n3 - Depósito. \n Presioná X para finalizar.');
-    }
-
-
-
-} else {
-
-    alert('Retendremos tu tarjeta por seguridad');
 }
 
-alert('Adiós');
+alert(ordenar(criterio, libros))
+
+
 
 
